@@ -1,31 +1,22 @@
 #include <stdio.h>
 #include <unistd.h>
-
 /**
  * main - Entry point
- *
- * Return: Always 0 (Success)
+ * Return: Always 0(Succes)
  */
 int main(void)
 {
-	int i, j;
+	int sing;
 
-	for (i = 0; i < 9; i++)
+	for (sing = '0'; sing <= '9'; sing++)
 	{
-	for (j = i + 1; j <= 9; j++)
-	{
-	putchar(i + 48);
-	putchar(j + 48);
-
-	if (!(i == 8 && j == 9))
-	{
-	putchar(44);
-	putchar(32);
+		putchar(sing);
+		if (sing != '9')
+		{
+			putchar(',');
+			putchar(' ');
+		}
 	}
-	}
-	}
-
-	putchar(10);
-
+	putchar('\n');
 	return (0);
 }
