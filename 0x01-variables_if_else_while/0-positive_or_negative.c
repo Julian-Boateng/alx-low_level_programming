@@ -17,11 +17,11 @@ int main(void)
 	printf("%d\n", n);
 
 	if (n > 0)
-		printf("%d is +\n", n);
+		printf("%d is posit\n", n);
 	else if (n == 0)
-		printf("%d is 0\n", n);
+		printf("%d is zr\n", n);
 	else
-		printf("%d is -\n", n);
+		printf("%d is nega\n", n);
 
 	return (0);
 }
