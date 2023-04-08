@@ -1,22 +1,26 @@
 #include "main.h"
 
 /**
- * clear_bit - sets the value of the bit at a given index to 0
- * @n: pointer to the number to modify
- * @index: index of the bit to set to 0
+ * flip_bits - Calculates the number of bits that need to be flipped to go from
+ * one number to another.
  *
- * Return: 1 if successful, -1 if an error occurred
+ * @n: First unsigned long int.
+ * @m: Second unsigned long int.
+ *
+ * Return: The number of bits needed to be flipped.
  */
-int clear_bit(unsigned long int *n, unsigned int index)
+unsigned int flip_bits(unsigned long int n, unsigned long int m)
 {
-	unsigned long int mask = 1;
+	unsigned long int diff = n ^ m;
+	unsigned int count = 0;
 
-	if (n == NULL || index >= sizeof(unsigned long int) * 8)
-		return (-1);
+	while (diff > 0)
+	{
+		if (diff & 1)
+			count++;
+		diff >>= 1;
+	}
 
-	mask <<= index;
-	*n &= ~mask;
-
-	return (1);
+	return (count);
 }
 
