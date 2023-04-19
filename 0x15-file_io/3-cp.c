@@ -2,69 +2,50 @@
 
 /**
  * main - copies contents of a file to another
- * @argc: argument count
  * @argv: argument vector
- * Return: 0 on success, or an error code on failure
+ * @argc: argument count
+ * Return: 0 on success
  */
 int main(int argc, char **argv)
 {
-	int fd_from, fd_to, bytes_read, bytes_written, close_status;
-	char buffer[1024];
+	int fd1, fd2, wr, tmp = 1024, cl1, cl2;
+	char *buff;
 
 	if (argc != 3)
 	{
-	dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
-	return (97);
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		exit(97);
 	}
 
-	fd_from = open(argv[1], O_RDONLY);
-	if (fd_from == -1)
-	{
-	dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-	return (98);
-	}
+	fd1 = open(argv[1], O_RDONLY);
+	fd2 = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 00664);
 
-	fd_to = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
-	if (fd_to == -1)
+	while (tmp == 1024)
 	{
-	dprintf(STDERR_FILENO, "Error: Can't write to file %s\n", argv[2]);
-	close(fd_from);
-	return (99);
-	}
+		buff = malloc(sizeof(char) * 1024);
+		tmp = read(fd1, buff, 1024);
+		if (buff == NULL || fd1 < 0 || tmp < 0)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+			free(buff);
+			exit(98);
+		}
 
-	while ((bytes_read = read(fd_from, buffer, sizeof(buffer))) > 0)
-	{
-	bytes_written = write(fd_to, buffer, bytes_read);
-	if (bytes_written != bytes_read)
-	{
-	dprintf(STDERR_FILENO, "Error: Can't write to file %s\n", argv[2]);
-	close(fd_from);
-	close(fd_to);
-	return (99);
+		wr = write(fd2, buff, tmp);
+		if (wr < 0 || fd2 < 0)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
+			free(buff);
+			exit(99);
+		}
+		free(buff);
 	}
-	}
-
-	if (bytes_read == -1)
+	cl1 = close(fd1);
+	cl2 = close(fd2);
+	if (cl1 == -1 || cl2 == -1)
 	{
-	dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-	close(fd_from);
-	close(fd_to);
-	return (98);
+	dprintf(STDERR_FILENO, "Error: Can't close fd %i\n", (cl1 == -1) ? fd1 : fd2);
+		exit(100);
 	}
-
-	close_status = 0;
-	if (close(fd_from) == -1)
-	{
-	dprintf(STDERR_FILENO, "Error: Can't close file descriptor %d\n", fd_from);
-	close_status = 100;
-	}
-
-	if (close(fd_to) == -1)
-	{
-	dprintf(STDERR_FILENO, "Error: Can't close file descriptor %d\n", fd_to);
-	close_status = 100;
-	}
-
-	return close_status;
+	return (0);
 }
-
