@@ -1,29 +1,32 @@
 #include "main.h"
+#include <string.h>
 
 /**
- * _strstr - locates a substring
- * @haystack: string to be serached
- * @needle: string to be found
- *
- * Return: pointer to the beginning of the located substring
- * Null if substring is not found
- */
+  * _strstr - function name
+  * @haystack : first parameter passed
+  * @needle : second parameter passed
+  * Return: begin or 0
+  */
 
 char *_strstr(char *haystack, char *needle)
 {
-	for (; *haystack != '\0'; haystack++)
+	while (*haystack)
 	{
-		char *n = haystack;
-		char *m = needle;
+		char *Begin = haystack;
+		char *pattern = needle;
 
-		while (*n == *m && *m != '\0')
+
+		while (*haystack && *pattern && *haystack == *pattern)
 		{
-			n++;
-			m++;
+			haystack++;
+			pattern++;
 		}
-		if (*m == '\0')
-			return (haystack);
+
+		if (!*pattern)
+		{
+			return (Begin);
+		}
+		haystack = Begin + 1;
 	}
 	return (0);
 }
-

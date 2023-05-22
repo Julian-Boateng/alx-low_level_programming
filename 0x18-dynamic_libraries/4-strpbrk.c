@@ -1,28 +1,28 @@
 #include "main.h"
 
 /**
- * _strpbrk - searches a string for any set of bytes
- * @s: string
- * @accept: string to be compared to s
- *
- * Return: a pointer to the byte s, Null otherwise
+ * _strpbrk - function name
+ * @s : pointer to check if the value is inside
+ * @accept : the value to check
+ * Return: s and 0
  */
-
 char *_strpbrk(char *s, char *accept)
 {
-	int k;
+	int i;
 
-	while (*s)
+	while (*s != '\0')
 	{
-		for (k = 0; accept[k]; k++)
+		i = 0;
+
+		while (accept[i] != '\0')
 		{
-			if (*s == accept[k])
+			if (*s == accept[i])
 			{
 				return (s);
 			}
+			i++;
 		}
-	s++;
+		s++;
 	}
-	return ('\0');
+	return (0);
 }
-
